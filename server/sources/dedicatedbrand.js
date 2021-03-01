@@ -19,10 +19,10 @@ const parse = (data, brand) => {
       const price = parseInt(
         $(element)
           .find('.productList-price')
-          .text()
-      );
+          .text());
+      const b = brand
 
-      return {name, price};
+      return {name, price, b};
     })
     .get();
   }
@@ -36,9 +36,10 @@ const parse = (data, brand) => {
       const price = 
         $(element)
           .find('.product-price')
-          .text()
+          .text();
+      const b = brand
 
-      return {name, price};
+      return {name, price, b};
     })
     .get();
   }
@@ -50,10 +51,11 @@ const parse = (data, brand) => {
         .replace(/\s/g, ' ');
       const price = 
         $(element)
-          .find('.product-price')
-          .text()
+          .find('.price.product-price')
+          .text();
+      const b = brand
 
-      return {name, price};
+      return {name, price, b};
     })
     .get();
   }
@@ -67,6 +69,7 @@ const cat = async (link, path, brand) => {
 
   if(brand == "dedicated")
   {
+    const AllProducts = [];
     const category = $(path).map((i, element) => {
       const l = link + $(element).find('a').attr('href');
       if(l.includes("/men/") == true)
@@ -77,13 +80,16 @@ const cat = async (link, path, brand) => {
     for(const element of links)
     {
       const products = await scrape(element, brand);
-      console.log(`🕵️‍♀️  browsing ${element}`);
+      /*console.log(`🕵️‍♀️  browsing ${element}`);
       console.log(products);
       console.log(products.length);
-      console.log('done');
+      console.log('done');*/
+      AllProducts.push(products);
     } 
+    return AllProducts;
   }
   if(brand == "mud"){
+    const AllProducts = [];
     const category = $(path).map((i, element) => {
       const l = link + $(element).attr('href');
       if(l.includes("/men-") == true)
@@ -94,18 +100,21 @@ const cat = async (link, path, brand) => {
     for(const element of links)
     {
       const products = await scrape(element, brand);
-      console.log(`🕵️‍♀️  browsing ${element}`);
+      /*console.log(`🕵️‍♀️  browsing ${element}`);
       console.log(products);
       console.log(products.length);
-      console.log('done');
-    } 
+      console.log('done');*/
+      AllProducts.push(products);
+    }
+    return AllProducts;
   }
   if(brand == "adresse"){
     const products = await scrape(link, brand);
-    console.log(`🕵️‍♀️  browsing ${link}`);
+    /*console.log(`🕵️‍♀️  browsing ${link}`);
     console.log(products);
     console.log(products.length);
-    console.log('done');
+    console.log('done');*/
+    return products
   }
 };
 
