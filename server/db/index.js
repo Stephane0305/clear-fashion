@@ -2,9 +2,9 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
-const MONGODB_DB_NAME = 'clearfashion';
-const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB_NAME = 'ClearFashionDB';
+const MONGODB_COLLECTION = 'products_new';
+const MONGODB_URI = 'mongodb+srv://ClearFashionDB:7qcEJ0CXlAwVh40z@clearfashiondatabase.h8eeq.mongodb.net/ClearFashionDB?retryWrites=true&w=majority';
 
 let client = null;
 let database = null;
