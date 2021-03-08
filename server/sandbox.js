@@ -1,4 +1,3 @@
-/* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const axios = require('axios');
 const cheerio = require('cheerio');
@@ -13,35 +12,33 @@ async function sandbox () {
     const Adresse = await dedicatedbrand.cat('https://adresse.paris/630-toute-la-collection?id_category=630&n=109', '.product-name', 'adresse');
 
     const client = await MongoClient.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-	const db =  client.db(MONGODB_DB_NAME)
+	  const db =  client.db(MONGODB_DB_NAME)
 
-    const collection_Dedicated = db.collection('Products_DedicatedB');
+    const collection = db.collection('Products');
     for(const element of dedicatedB)
     {
-    	const result = collection_Dedicated.insertMany(element);
+    	const result = collection.insertMany(element);
     }
 
-    const collection_Mud = db.collection('Products_Mud');
     for(const element of Mud)
     {
-    	const result = collection_Mud.insertMany(element);
+    	const result = collection.insertMany(element);
     }
 
-    const collection_Adresse = db.collection('Products_Adresse');
-    const result = collection_Adresse.insertMany(Adresse);
+    const result = collection.insertMany(Adresse);
 
-  	const SortBrand = await collection_Adresse.find({b: 'dedicated'}).toArray();
+  	const SortBrand = await collection.find({b: 'dedicated'}).toArray();
 
   	console.log("Brand");
   	console.log(SortBrand);
 
     const price = 30;
-  	const LessPrice = await collection_Dedicated.find({ price: { $lt: price }}).toArray();
+  	const LessPrice = await collection.find({ price: { $lt: price }}).toArray();
 
   	console.log("Less than a price: ");
   	console.log(LessPrice);
 
-  	const SortedPrice = await collection_Mud.aggregate([{ $sort : { price : 1 }}]).toArray();
+  	const SortedPrice = await collection.aggregate([{ $sort : { price : 1 }}]).toArray();
 
   	console.log("Sorted by price: ")
   	console.log(SortedPrice);
