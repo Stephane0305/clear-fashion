@@ -20,6 +20,26 @@ app.get('/', (request, response) => {
   response.send({'ack': true});
 });
 
+app.get('/products/app', async (request, response) => {
+    let page = request.query.page;
+    let size = request.query.size;
+    page = parseInt(page);
+    size = parseInt(size);
+    let start = (size*(page-1));
+    let end = start + size;
+    let products = [];
+    const result = await db.find({"price":{$ne:Number("Nan")}});
+    console.log("start: " + start);
+    console.log("end: " + end);
+    for(i=start; i<end; i++){
+        if(result[i] != null){
+            products.push(result[i])
+        }
+    }
+    const number = await db.count();
+    return response.send({"success":true,"data":{"result":products,"meta":{"currentPage":page,"pageCount":Math.round(result.length/size),"pageSize":size,"count":number}}});
+});
+
 app.get('/products/search', async (request, response) => {
     let limit = request.query.limit;
     let brand = request.query.brand;
@@ -68,7 +88,8 @@ app.get('/products/search', async (request, response) => {
     	return response.send(result);
     }
     const result = await db.find();
-    return response.send(result) 
+    const number = await db.count();
+    return response.send(result); 
 });
 
 app.get('/products/:id', async (request, response) => {

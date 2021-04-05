@@ -1,5 +1,6 @@
-// Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
+// client vercel : https://client-five-lake.vercel.app
+// server vercel : https://server-rho-flame.vercel.app/products/app
 
 // current products on the page
 let currentProducts = [];
@@ -40,7 +41,7 @@ const setCurrentProducts = ({result, meta}) => {
 const fetchProducts = async(page=1, size=12) => {
   try {
     const response = await fetch(
-      `https://clear-fashion-api.vercel.app?page=${page}&size=${size}`
+      `https://server-rho-flame.vercel.app/products/app?page=${page}&size=${size}`
     );
     const body = await response.json();
 
@@ -61,14 +62,15 @@ const fetchProducts = async(page=1, size=12) => {
  * @param  {Array} products
  */
 const renderProducts = products => {
+  console.log(products);
   const fragment = document.createDocumentFragment();
   const div = document.createElement('div');
   const template = products
     .map(product => {
       return `
-      <div class="product" id=${product.uuid}>
+      <div class="product" id=${product._id}>
         <input type="checkbox" id='${product.name}' name="favourite">
-        <span>${product.brand}</span>
+        <span>${product.b}</span>
         <a href="${product.link}" target="_blank">${product.name}</a>
         <span>${product.price}</span>
       </div>
@@ -101,9 +103,9 @@ const ListBrand = products => {
   const name_brand = [];
   for(var i = 0; i < products.length; i++)
   {
-    if(name_brand.includes(products[i]["brand"]) == false)
+    if(name_brand.includes(products[i]["b"]) == false)
     {
-      name_brand.push(products[i]["brand"])
+      name_brand.push(products[i]["b"])
     }
   }
   return name_brand;
@@ -165,7 +167,7 @@ const sortbrand = (products, brand) => {
   const sort_product = [];
   for(var i = 0; i < products.length; i++)
   {
-    if(products[i]["brand"] == brand)
+    if(products[i]["b"] == brand)
     {
       sort_product.push(products[i]);
     }

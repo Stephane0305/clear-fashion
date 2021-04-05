@@ -3,7 +3,7 @@ const {MongoClient} = require('mongodb');
 const fs = require('fs');
 
 const MONGODB_DB_NAME = 'ClearFashionDB';
-const MONGODB_COLLECTION = 'products_new';
+const MONGODB_COLLECTION = 'Products';
 const MONGODB_URI = 'mongodb+srv://ClearFashionDB:7qcEJ0CXlAwVh40z@clearfashiondatabase.h8eeq.mongodb.net/ClearFashionDB?retryWrites=true&w=majority';
 
 let client = null;
@@ -64,18 +64,30 @@ module.exports.find = async (query, limit=12) => {
   try {
     if(query === {})
     {
-      const mysort = { price: 1 };
+      //const mysort = { price: 1 };
       const db = await getDB();
       const collection = db.collection(MONGODB_COLLECTION);
-      const result = await collection.find().sort(mysort).limit(limit).toArray();
+      const result = await collection.find().limit(limit).toArray();
       return result;
     }
-    const mysort = { price: 1 };
+    //const mysort = { price: 1 };
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query).sort(mysort).limit(limit).toArray();
+    const result = await collection.find(query).toArray();
 
     return result;
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+  }
+};
+
+module.exports.count = async () => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const number = collection.countDocuments({});
+    return number
   } catch (error) {
     console.error('🚨 collection.find...', error);
     return null;
